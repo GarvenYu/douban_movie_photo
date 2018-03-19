@@ -1,0 +1,2 @@
+# douban_movie_photo
+使用scrapy爬取豆瓣某部电影下的所有图片
