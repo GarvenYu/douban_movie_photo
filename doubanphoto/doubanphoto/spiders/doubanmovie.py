@@ -21,14 +21,12 @@ class DoubanmovieSpider(scrapy.Spider):
             yield from super().start_requests()
 
     def parse(self, response):
-        link_ls = []
         for div in response.css('div.mod:nth-child(1) ul li'):
-            link = div.css('img::attr(src)').extract_first()
-            link_ls.append(link)
-        yield {'image_urls': link_ls}
+            link = div.css('a::attr(href)').extract_first()
+            yield scrapy.Request(link, callback=self.download_images)
 
-    # def download_images(self, response):
-    #     link_ls = []
-    #     link_ls.append(response.css(
-    #         'span.magnifier a::attr(href)').extract_first())
-    #     yield {'image_urls': link_ls}
+    def download_images(self, response):
+        link_ls = []
+        link_ls.append(response.css(
+            'a.mainphoto img::attr(src)').extract_first())
+        yield {'image_urls': link_ls}
